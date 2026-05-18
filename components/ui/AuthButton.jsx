@@ -1,12 +1,23 @@
 'use client'
 
 import React from 'react'
-import { LogIn } from 'lucide-react'
+import { LogIn, LogOut } from 'lucide-react'
 import { Button } from './button'
 import { AuthModal } from './AuthModal'
+import { signOut } from '@/app/action'
 
-function AuthButton() {
+function AuthButton({user}) {
   const [isAuthOpen, setIsAuthOpen] = React.useState(false)
+   console.log(user)
+  if(user) {
+      
+    return (
+      <Button variant="destructive" size="sm" className=" text-white gap-2" onClick={signOut}>
+        <LogOut className="w-4 h-4" />
+        Sign Out
+      </Button>
+    )
+  }
 
   return (
     <>
