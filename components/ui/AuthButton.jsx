@@ -12,7 +12,7 @@ function AuthButton({user}) {
   if(user) {
       
     return (
-      <Button variant="destructive" size="sm" className=" text-white gap-2" onClick={signOut}>
+      <Button variant="default" size="sm" className="w-full sm:w-auto bg-gray-600 hover:bg-gray-500 text-white gap-2" onClick={signOut}>
         <LogOut className="w-4 h-4" />
         Sign Out
       </Button>
@@ -24,7 +24,7 @@ function AuthButton({user}) {
       <Button
         variant="default"
         size="sm"
-        className="bg-orange-600 hover:bg-orange-500 gap-2"
+        className="w-full sm:w-auto bg-orange-600 hover:bg-orange-500 gap-2"
         onClick={() => setIsAuthOpen(true)}
       >
         <LogIn className="w-4 h-4" />
