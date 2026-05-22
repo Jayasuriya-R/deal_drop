@@ -8,6 +8,13 @@ export async function GET(){
 }
 
 export async function POST(request){
+    let results = {
+        total: 0,
+        updated: 0,
+        failed: 0,
+        changed: 0
+    }
+
     try {
         const authHeader = request.headers.get('authorization');
         const cronSecret = process.env.CRON_SECRET;
@@ -27,14 +34,10 @@ export async function POST(request){
 
         if(productsError) throw productsError
 
-        const results = {
-            total: products.length,
-            updated: 0,
-            failed: 0,
-            changed:0
-        }
+        const items = products ?? []
+        results.total = items.length
 
-        for (const product of products){
+        for (const product of items){
             try {
                 const productData = await scrpeProduct(product.url);
 
@@ -56,30 +59,34 @@ export async function POST(request){
 
                 if(newPrice !== oldPrice){
                     await supabase.from('price_history').insert({
-                        product_id:product.id,
+                        product_id: product.id,
                         price: newPrice,
                         currency: productData.currencyCode || product.currency,
                     });
-                   results.changed++; 
+                    results.changed++;
 
-                   if(newPrice < oldPrice){
-                    const {data:{user}} = await supabase.auth.admin.getUserById(product.user_id);
-                    if(user?.email){
-                      const emailResult = await sendEmailAlert(user.email, product, oldPrice, newPrice);
+                    const { data, error: userError } = await supabase.auth.admin.getUserById(product.user_id);
+                    const user = data?.user
+                    if(userError){
+                        console.error('Failed to load user for alert:', userError);
                     }
-                   }
+
+                    if(newPrice < oldPrice && user?.email){
+                        await sendEmailAlert(user.email, product, oldPrice, newPrice);
+                    }
                 }
+
                 results.updated++;
-                return NextResponse.json({success:true,message:'Prices checked successfully', results})
-
             } catch (error) {
-                console.error(`Failed to update product ${product.id}:`, error);
-
+                console.error(`Failed to update product ${product?.id}:`, error);
+                results.failed++;
             }
         }
 
+        return NextResponse.json({success:true,message:'Prices checked successfully', results})
+
     } catch (error) {
         console.error('Error occurred while checking prices:', error);
-        results.failed++;
+        return NextResponse.json({error:'Internal Server Error'}, {status:500});
     }
 }
