@@ -25,7 +25,6 @@ export async function addProducts(formData){
        if(!user) return {error:'Unauthorized'}
 
        const productData = await scrpeProduct(url);
-        console.log("productData", productData);
        if(!productData.productName || !productData.currentPrice){
          return {error:'Failed to extract product data. Please check the URL and try again.'}
        }
@@ -40,7 +39,7 @@ export async function addProducts(formData){
          .eq('url', url)
          .single();
 
-         const isUpdated = !!existingProduct
+         const isUpdated = !!existingProduct;
 
          const {data: product, error} = await supabase.from('products').upsert(
             {
@@ -60,7 +59,7 @@ export async function addProducts(formData){
 
          if(error) throw error
 
-         const shouldAddHistory = isUpdated || existingProduct.current_price !== newPrice;
+         const shouldAddHistory = !isUpdated || existingProduct.current_price !== newPrice;
 
          if(shouldAddHistory){
             await supabase.from('price_history').insert({
@@ -78,9 +77,9 @@ export async function addProducts(formData){
          }
 
    } catch (error) {
-      console.error('Error adding/updating product:', error);
-      return { error: 'An error occurred while adding/updating the product.' };
-   }
+    console.error('Error adding/updating product:', error);
+    return { error: error?.message || JSON.stringify(error) || 'Unknown error' };
+}
 }
 
 export async function deleteProduct(productId){

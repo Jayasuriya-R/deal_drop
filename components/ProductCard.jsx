@@ -4,17 +4,13 @@ import { Card, CardContent, CardFooter } from './ui/card'
 import { Button } from './ui/button'
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { deleteProduct } from '@/app/action';
-import { Alert } from './ui/alert';
 import PriceChart from './PriceChart';
 import { toast } from 'sonner';
 
-function ProductCard({ product }) {
-    const [showChart, setShowChart] = React.useState(false);
+function ProductCard({ product, isExpanded, onToggle }) {
     const [deleting, setDeleting] = React.useState(false);
 
-
     const handleCardDelete = async () => {
-
         const confirmed = window.confirm(
             "Are you sure you want to remove this product from tracking?"
         );
@@ -23,7 +19,6 @@ function ProductCard({ product }) {
 
         try {
             setDeleting(true);
-
             const result = await deleteProduct(product.id);
 
             if (result?.error) {
@@ -31,115 +26,86 @@ function ProductCard({ product }) {
                 return;
             }
 
-            toast.success(
-                result.message || "Product deleted successfully!"
-            );
-
+            toast.success(result.message || "Product deleted successfully!");
         } catch (error) {
             toast.error("Something went wrong");
         } finally {
             setDeleting(false);
         }
     };
-    console.log("url", product.image_url)
+
     return (
-        <>
-            <Card className="rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden">
-                <CardContent className="p-5">
+        <Card className="rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden">
+            <CardContent className="p-5">
 
-                    {/* Top Section */}
-                    <div className="flex items-start gap-4">
-
-                        {/* Product Image */}
-                        <div className="w-20 h-20 rounded-xl overflow-hidden bg-gray-100 flex-shrink-0">
-                            <img
-                                src={
-                                    product.image_url &&
-                                        !product.image_url.includes("transparent-background")
-                                        ? product.image_url
-                                        : "/placeholder-product.png"
-                                }
-                                alt={product.name}
-                                className="w-full h-full object-cover"
-                            />
-                        </div>
-
-                        {/* Product Info */}
-                        <div className="flex-1">
-                            <h3 className="text-sm sm:text-base font-semibold text-gray-900 line-clamp-2 uppercase">
-                                {product.name}
-                            </h3>
-
-                            <div className="mt-2 flex items-center gap-3 flex-wrap">
-                                <span className="text-3xl font-bold text-orange-600">
-                                    {product.currency} {product.current_price}
-                                </span>
-
-                                <span className="inline-flex items-center rounded-full bg-gray-100 px-2 py-1 text-xs font-medium text-gray-600">
-                                    ↘ Tracking
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Actions */}
-                    <div className="mt-6 flex flex-wrap gap-3">
-
-                        <Button
-                            variant="outline"
-                            className="rounded-lg"
-                            onClick={() => setShowChart((prev) => !prev)}
-                        >
-                            {
-                                showChart ? (
-                                    <>
-                                        <ChevronUp />
-                                        Hide Chart
-                                    </>
-                                ) : (
-                                    <>
-                                        <ChevronDown />
-                                        Show Chart
-                                    </>
-                                )
+                <div className="flex items-start gap-4">
+                    <div className="w-20 h-20 rounded-xl overflow-hidden bg-gray-100 flex-shrink-0">
+                        <img
+                            src={
+                                product.image_url &&
+                                !product.image_url.includes("transparent-background")
+                                    ? product.image_url
+                                    : "/placeholder-product.png"
                             }
-                        </Button>
-
-                        <Button
-                            variant="outline"
-                            asChild
-                            className="rounded-lg"
-                        >
-                            <a
-                                href={product.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                ↗ View Product
-                            </a>
-                        </Button>
-
-                        <Button
-                            variant="ghost"
-                            className="text-red-500 hover:text-red-600 hover:bg-red-50 rounded-lg"
-                            onClick={handleCardDelete}
-                            disabled={deleting}
-                        >
-                            🗑 Remove
-                        </Button>
+                            alt={product.name}
+                            className="w-full h-full object-cover"
+                        />
                     </div>
-                </CardContent>
-                {showChart && (
-                    <CardFooter className="border-t border-gray-100 bg-gray-50/40">
 
-                        <div className="w-full rounded-xl bg-white p-4">
-                            <PriceChart productId={product.id} />
+                    <div className="flex-1">
+                        <h3 className="text-sm sm:text-base font-semibold text-gray-900 line-clamp-2 uppercase">
+                            {product.name}
+                        </h3>
+
+                        <div className="mt-2 flex items-center gap-3 flex-wrap">
+                            <span className="text-3xl font-bold text-orange-600">
+                                {product.currency} {product.current_price}
+                            </span>
+                            <span className="inline-flex items-center rounded-full bg-gray-100 px-2 py-1 text-xs font-medium text-gray-600">
+                                ↘ Tracking
+                            </span>
                         </div>
+                    </div>
+                </div>
 
-                    </CardFooter>
-                )}
-            </Card>
-        </>
+                <div className="mt-6 flex flex-wrap gap-3">
+                    <Button
+                        variant="outline"
+                        className="rounded-lg"
+                        onClick={onToggle}
+                    >
+                        {isExpanded ? (
+                            <><ChevronUp />Hide Chart</>
+                        ) : (
+                            <><ChevronDown />Show Chart</>
+                        )}
+                    </Button>
+
+                    <Button variant="outline" asChild className="rounded-lg">
+                        <a href={product.url} target="_blank" rel="noopener noreferrer">
+                            ↗ View Product
+                        </a>
+                    </Button>
+
+                    <Button
+                        variant="ghost"
+                        className="text-red-500 hover:text-red-600 hover:bg-red-50 rounded-lg"
+                        onClick={handleCardDelete}
+                        disabled={deleting}
+                    >
+                        🗑 Remove
+                    </Button>
+                </div>
+            </CardContent>
+
+            {isExpanded && (
+                <CardFooter className="border-t border-gray-100 bg-gray-50/40">
+                    <div className="w-full rounded-xl bg-white p-4">
+                        <PriceChart productId={product.id} />
+                    </div>
+                </CardFooter>
+            )}
+        </Card>
     )
 }
 

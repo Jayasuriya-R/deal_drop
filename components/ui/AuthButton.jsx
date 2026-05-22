@@ -8,7 +8,6 @@ import { signOut } from '@/app/action'
 
 function AuthButton({user}) {
   const [isAuthOpen, setIsAuthOpen] = React.useState(false)
-   console.log(user)
   if(user) {
       
     return (

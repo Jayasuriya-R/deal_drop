@@ -8,16 +8,15 @@ import { createClient } from "@/utils/supabase/server";
 import { Package, TrendingDown } from "lucide-react";
 import { getProducts } from "./action";
 import ProductCard from "@/components/ProductCard";
+import ProductList from "@/components/ProductList";
 
 export default async function Home() {
   const supabase = await createClient()
 
   const response = await supabase.auth.getUser()
-  console.log(response.data)
   const user = response.data.user
   const products = user ? await getProducts() : [];
 
-  console.log(" products", products);
   return (
 
     <main className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-50">
@@ -111,16 +110,8 @@ export default async function Home() {
           </div>
 
           {/* Product Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-7">
-            {products.map((product) => (
-              <div
-                key={product.id}
-                className="bg-white border border-gray-200 rounded-2xl shadow-sm p-1.5"
-              >
-                <ProductCard product={product} />
-              </div>
-            ))}
-          </div>
+          <ProductList products={products} />
+          
         </section>
       )}
 
