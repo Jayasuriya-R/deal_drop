@@ -1,4 +1,3 @@
-"use server";
 
 import { sendEmailAlert } from "@/lib/email";
 import { scrpeProduct } from "@/lib/firecrawl";
