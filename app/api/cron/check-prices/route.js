@@ -1,3 +1,5 @@
+"use server";
+
 import { sendEmailAlert } from "@/lib/email";
 import { scrpeProduct } from "@/lib/firecrawl";
 import { createClient } from "@/utils/supabase/server";
