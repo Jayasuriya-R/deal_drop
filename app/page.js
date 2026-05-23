@@ -26,13 +26,13 @@ export default async function Home() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-5 flex flex-col gap-4 items-center justify-between sm:flex-row">
 
           <div className="flex items-center gap-3">
-            <Image
-              src="/deal-drop-logo.png"
-              alt="Deal Drop Logo"
-              width={600}
-              height={200}
-              className="h-11 w-auto"
-            />
+              <Image
+                src="/deal-drop-logo.png"
+                alt="Deal Drop Logo"
+                width={600}
+                height={200}
+                className="h-9 sm:h-11 w-auto"
+              />
           </div>
 
           <AuthButton user={user} />
@@ -40,14 +40,14 @@ export default async function Home() {
       </header>
 
       {/* Hero Section */}
-      <section className="py-16 lg:py-20 px-6">
+      <section className="py-16 lg:py-10 px-6">
         <div className="max-w-7xl mx-auto text-center">
 
           <div className="inline-flex items-center px-5 py-2.5 rounded-full border border-orange-600 bg-orange-50 text-orange-700 text-sm font-semibold mb-6 shadow-sm">
             Never miss a deal again!
           </div>
 
-          <h2 className="text-4xl lg:text-5xl font-black tracking-[-0.03em] text-gray-900 leading-tight max-w-5xl mx-auto">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-[-0.03em] text-gray-900 leading-tight max-w-5xl mx-auto">
             Welcome to{" "}
             <span className="text-orange-600">
               Deal Drop

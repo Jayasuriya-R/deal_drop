@@ -39,7 +39,7 @@ function ProductCard({ product, isExpanded, onToggle }) {
             <CardContent className="p-5">
 
                 <div className="flex items-start gap-4">
-                    <div className="w-20 h-20 rounded-xl overflow-hidden bg-gray-100 flex-shrink-0">
+                    <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-xl overflow-hidden bg-gray-100 flex-shrink-0">
                         <img
                             src={
                                 product.image_url &&
@@ -48,7 +48,7 @@ function ProductCard({ product, isExpanded, onToggle }) {
                                     : "/placeholder-product.png"
                             }
                             alt={product.name}
-                            className="w-full h-full object-cover"
+                                className="w-full h-full object-cover"
                         />
                     </div>
 

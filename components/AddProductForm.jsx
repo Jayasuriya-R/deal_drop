@@ -48,14 +48,14 @@ function AddProductForm({ user }) {
                     onChange={(e) => setUrl(e.target.value)}
                     disabled={loading}
                     required
-                    className="h-14 flex-1 rounded-xl border-gray-300 bg-white px-5 text-base font-medium shadow-sm transition-all focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:border-orange-500"
+                        className="h-12 sm:h-14 flex-1 rounded-xl border-gray-300 bg-white px-5 text-base font-medium shadow-sm transition-all focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:border-orange-500"
                 />
 
                 <Button
                     type="submit"
                     size="xl"
                     disabled={loading}
-                    className="h-14 px-8 rounded-xl bg-orange-600 text-base font-bold shadow-sm transition-all hover:bg-orange-500 hover:shadow-md w-full sm:w-auto"
+                    className="h-12 sm:h-14 px-6 sm:px-8 rounded-xl bg-orange-600 text-base font-bold shadow-sm transition-all hover:bg-orange-500 hover:shadow-md w-full sm:w-auto"
                 >
                     {loading ? (
                         <>
