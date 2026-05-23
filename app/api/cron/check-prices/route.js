@@ -1,7 +1,7 @@
 
 import { sendEmailAlert } from "@/lib/email";
 import { scrpeProduct } from "@/lib/firecrawl";
-import { createClient } from "@/utils/supabase/server";
+import { createClient } from "@supabase/supabase-js"; // ← change this import
 import { NextResponse } from "next/server";
 
 export async function GET() {
